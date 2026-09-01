@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Our List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Signed-out view -->
+  <div id="signed-out" class="screen">
+    <div class="signin-card">
+      <p class="eyebrow">a shared notebook for</p>
+      <h1>Our List</h1>
+      <p class="sub">Travel expenses, groceries, and the social calendar — kept in sync between the two of you.</p>
+      <button id="google-signin-btn" class="btn-primary">Sign in with Google</button>
+      <p id="signin-error" class="signin-error" hidden></p>
+    </div>
+  </div>
+
+  <!-- Signed-in view -->
+  <div id="signed-in" class="screen" hidden>
+    <header class="topbar">
+      <h1>Our List</h1>
+      <div class="who">
+        <span id="user-email"></span>
+        <button id="signout-btn" class="btn-text">Sign out</button>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab" data-cat="travel" role="tab" aria-selected="true">Travel</button>
+      <button class="tab" data-cat="groceries" role="tab" aria-selected="false">Groceries</button>
+      <button class="tab" data-cat="social" role="tab" aria-selected="false">Social</button>
+    </nav>
+
+    <main>
+      <section id="list-panel">
+        <p id="sync-status" class="sync-status">Synced</p>
+        <ul id="item-list" class="item-list"></ul>
+        <p id="empty-state" class="empty-state" hidden></p>
+      </section>
+    </main>
+
+    <form id="add-form" class="add-bar">
+      <button type="button" id="mic-btn" class="mic-btn" title="Speak an item" aria-label="Add by voice">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+          <path d="M19 10v1a7 7 0 0 1-14 0v-1"/>
+          <line x1="12" y1="19" x2="12" y2="22"/>
+        </svg>
+      </button>
+      <input type="text" id="item-input" autocomplete="off" placeholder="Add an item…">
+      <button type="submit" class="btn-add">Add</button>
+    </form>
+  </div>
+
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
