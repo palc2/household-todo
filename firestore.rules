@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Only these two signed-in Google accounts may read or write the list.
+    // EDIT these two email addresses to match your firebase-config.js ALLOWED_EMAILS.
+    function isHouseholdMember() {
+      return request.auth != null &&
+        request.auth.token.email in [
+          "you@gmail.com",
+          "husband@gmail.com"
+        ];
+    }
+
+    match /items/{itemId} {
+      allow read, write: if isHouseholdMember();
+    }
+  }
+}
