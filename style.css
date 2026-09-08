@@ -11,9 +11,13 @@
   --groceries-bg: #F1EADA;
   --social: #A15C52;
   --social-bg: #F3E4DF;
+  --childcare: #5B7553;
+  --childcare-bg: #EBEFE6;
+  --other: #6B5B7A;
+  --other-bg: #ECE7F0;
 
-  --accent: var(--travel);
-  --accent-bg: var(--travel-bg);
+  --accent: var(--childcare);
+  --accent-bg: var(--childcare-bg);
 
   --radius: 10px;
 }
@@ -321,3 +325,4 @@ main {
   .signin-card h1 { font-size: 2.1rem; }
   .who span#user-email { display: none; }
 }
+
