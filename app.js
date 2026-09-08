@@ -7,7 +7,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 import {
   getFirestore, collection, addDoc, onSnapshot, doc, updateDoc,
-  deleteDoc, query, orderBy, serverTimestamp, where
+  deleteDoc, query, serverTimestamp, where
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 const app = initializeApp(firebaseConfig);
@@ -31,12 +31,14 @@ const itemInput = document.getElementById("item-input");
 const micBtn = document.getElementById("mic-btn");
 
 const CATEGORY_META = {
-  travel:     { label: "Travel",     placeholder: "e.g., Reimburse Sam $40 for the taxi" },
+  childcare:  { label: "Childcare",  placeholder: "e.g., Pack extra socks for daycare" },
   groceries:  { label: "Groceries",  placeholder: "e.g., Milk, eggs, bread" },
   social:     { label: "Social",     placeholder: "e.g., RSVP to Maria's birthday, Sept 12" },
+  other:      { label: "Other",      placeholder: "e.g., Renew car registration" },
+  travel:     { label: "Travel",     placeholder: "e.g., Reimburse Sam $40 for the taxi" },
 };
 
-let currentCategory = "travel";
+let currentCategory = "childcare";
 let unsubscribeItems = null;
 
 // ---------- Auth ----------
@@ -94,14 +96,21 @@ function subscribeToCategory(category) {
   if (unsubscribeItems) unsubscribeItems();
   syncStatus.textContent = "Syncing…";
 
+  // Note: filtering by category without an orderBy on a different field
+  // avoids Firestore's composite-index requirement. We sort client-side
+  // instead, by createdAt descending.
   const q = query(
     collection(db, "items"),
-    where("category", "==", category),
-    orderBy("createdAt", "desc")
+    where("category", "==", category)
   );
 
   unsubscribeItems = onSnapshot(q, (snapshot) => {
-    renderItems(snapshot.docs);
+    const docs = [...snapshot.docs].sort((a, b) => {
+      const aTime = a.data().createdAt?.toMillis?.() ?? 0;
+      const bTime = b.data().createdAt?.toMillis?.() ?? 0;
+      return bTime - aTime;
+    });
+    renderItems(docs);
     syncStatus.textContent = "Synced";
   }, (err) => {
     syncStatus.textContent = "Sync error — " + err.message;
@@ -212,3 +221,4 @@ if (SpeechRecognition) {
   micBtn.title = "Voice input isn't supported in this browser — try Chrome or Edge";
   micBtn.style.opacity = "0.4";
 }
+
