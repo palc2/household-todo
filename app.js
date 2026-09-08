@@ -35,6 +35,7 @@ const CATEGORY_META = {
   groceries:  { label: "Groceries",  placeholder: "e.g., Milk, eggs, bread" },
   social:     { label: "Social",     placeholder: "e.g., RSVP to Maria's birthday, Sept 12" },
   other:      { label: "Other",      placeholder: "e.g., Renew car registration" },
+  docappt:    { label: "Doc Appt",   placeholder: "e.g., Schedule pediatrician follow-up" },
   travel:     { label: "Travel",     placeholder: "e.g., Reimburse Sam $40 for the taxi" },
 };
 
