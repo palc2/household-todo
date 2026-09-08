@@ -16,6 +16,6 @@ export const firebaseConfig = {
 // This must match EXACTLY what's in firestore.rules (that's the real gatekeeper —
 // this list is just used to show a friendly error if someone else signs in).
 export const ALLOWED_EMAILS = [
-  "you@gmail.com",
-  "husband@gmail.com"
+  "haigecuius@gmail.com",
+  "mdislamwork@gmail.com"
 ];
