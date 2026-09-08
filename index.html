@@ -16,7 +16,7 @@
     <div class="signin-card">
       <p class="eyebrow">a shared notebook for</p>
       <h1>Our List</h1>
-      <p class="sub">Travel expenses, groceries, and the social calendar — kept in sync between the two of you.</p>
+      <p class="sub">Childcare, groceries, the social calendar, travel expenses, and everything else — kept in sync between the two of you.</p>
       <button id="google-signin-btn" class="btn-primary">Sign in with Google</button>
       <p id="signin-error" class="signin-error" hidden></p>
     </div>
@@ -33,9 +33,11 @@
     </header>
 
     <nav class="tabs" role="tablist">
-      <button class="tab" data-cat="travel" role="tab" aria-selected="true">Travel</button>
+      <button class="tab" data-cat="childcare" role="tab" aria-selected="true">Childcare</button>
       <button class="tab" data-cat="groceries" role="tab" aria-selected="false">Groceries</button>
       <button class="tab" data-cat="social" role="tab" aria-selected="false">Social</button>
+      <button class="tab" data-cat="other" role="tab" aria-selected="false">Other</button>
+      <button class="tab" data-cat="travel" role="tab" aria-selected="false">Travel</button>
     </nav>
 
     <main>
@@ -63,3 +65,4 @@
   <script type="module" src="app.js"></script>
 </body>
 </html>
+
