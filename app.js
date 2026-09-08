@@ -86,6 +86,16 @@ const CATEGORY_META = {
       "vacation", "layover", "check in for",
     ],
   },
+  marketplace: {
+    label: "Marketplace",
+    placeholder: "e.g., Sell the old crib on Facebook Marketplace",
+    keywords: [
+      "buy", "sell", "selling", "buying", "sold", "bought", "for sale",
+      "marketplace", "craigslist", "facebook marketplace", "offerup", "ebay",
+      "listing", "list it", "secondhand", "resell", "garage sale", "yard sale",
+      "trade in", "consign", "consignment",
+    ],
+  },
 };
 
 // ---------- Auto-categorization ----------
