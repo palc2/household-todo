@@ -328,3 +328,28 @@ main {
   .who span#user-email { display: none; }
 }
 
+/* ---------- Auto-category toast ---------- */
+.category-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 78px;
+  transform: translateX(-50%) translateY(8px);
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 20;
+}
+
+.category-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
