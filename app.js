@@ -29,15 +29,85 @@ const syncStatus = document.getElementById("sync-status");
 const addForm = document.getElementById("add-form");
 const itemInput = document.getElementById("item-input");
 const micBtn = document.getElementById("mic-btn");
+const categoryToast = document.getElementById("category-toast");
 
 const CATEGORY_META = {
-  childcare:  { label: "Childcare",  placeholder: "e.g., Pack extra socks for daycare" },
-  groceries:  { label: "Groceries",  placeholder: "e.g., Milk, eggs, bread" },
-  social:     { label: "Social",     placeholder: "e.g., RSVP to Maria's birthday, Sept 12" },
-  other:      { label: "Other",      placeholder: "e.g., Renew car registration" },
-  docappt:    { label: "Doc Appt",   placeholder: "e.g., Schedule pediatrician follow-up" },
-  travel:     { label: "Travel",     placeholder: "e.g., Reimburse Sam $40 for the taxi" },
+  childcare: {
+    label: "Childcare",
+    placeholder: "e.g., Pack extra socks for daycare",
+    keywords: [
+      "daycare", "babysit", "babysitter", "nanny", "preschool", "diaper", "diapers",
+      "stroller", "playdate", "school pickup", "pick up the kids", "kids'", "toddler",
+      "car seat", "bottle", "formula", "bedtime",
+    ],
+  },
+  groceries: {
+    label: "Groceries",
+    placeholder: "e.g., Milk, eggs, bread",
+    keywords: [
+      "milk", "eggs", "bread", "grocery", "groceries", "produce", "snacks", "coffee",
+      "fruit", "vegetable", "vegetables", "meat", "pantry", "costco", "trader joe",
+      "whole foods", "cheese", "butter", "yogurt", "cereal", "paper towels",
+    ],
+  },
+  social: {
+    label: "Social",
+    placeholder: "e.g., RSVP to Maria's birthday, Sept 12",
+    keywords: [
+      "rsvp", "birthday", "party", "dinner with", "brunch", "wedding", "invite",
+      "hang out", "movie night", "drinks with", "housewarming", "shower", "reunion",
+      "get-together", "potluck",
+    ],
+  },
+  other: {
+    label: "Other",
+    placeholder: "e.g., Renew car registration",
+    keywords: [
+      "renew", "registration", "dmv", "subscription", "insurance", "warranty",
+      "return", "exchange", "repair", "taxes", "bill", "bills", "bank", "lease",
+    ],
+  },
+  docappt: {
+    label: "Doc Appt",
+    placeholder: "e.g., Schedule pediatrician follow-up",
+    keywords: [
+      "doctor", "dentist", "appointment", "checkup", "check-up", "follow-up",
+      "pediatrician", "therapist", "physical", "vaccine", "vaccination",
+      "prescription", "refill", "ob-gyn", "obgyn", "dermatologist", "eye exam",
+      "optometrist", "orthodontist", "urgent care", "specialist",
+    ],
+  },
+  travel: {
+    label: "Travel",
+    placeholder: "e.g., Reimburse Sam $40 for the taxi",
+    keywords: [
+      "flight", "hotel", "reimburse", "taxi", "uber", "lyft", "airbnb", "passport",
+      "luggage", "itinerary", "boarding", "rental car", "airport", "trip to",
+      "vacation", "layover", "check in for",
+    ],
+  },
 };
+
+// ---------- Auto-categorization ----------
+// Scores the typed/spoken text against each category's keyword list and
+// returns the best-matching category key, or null if nothing matched
+// (in which case we fall back to whichever tab is currently open).
+function guessCategory(text) {
+  const lower = text.toLowerCase();
+  let bestCategory = null;
+  let bestScore = 0;
+  for (const [key, meta] of Object.entries(CATEGORY_META)) {
+    const score = (meta.keywords || []).reduce(
+      (count, kw) => count + (lower.includes(kw) ? 1 : 0),
+      0
+    );
+    if (score > bestScore) {
+      bestScore = score;
+      bestCategory = key;
+    }
+  }
+  return bestCategory;
+}
 
 let currentCategory = "childcare";
 let unsubscribeItems = null;
@@ -161,18 +231,41 @@ function renderItems(docs) {
 }
 
 // ---------- Add item ----------
+let toastTimer = null;
+function showCategoryToast(label) {
+  if (!categoryToast) return;
+  categoryToast.textContent = `Filed under ${label}`;
+  categoryToast.hidden = false;
+  requestAnimationFrame(() => categoryToast.classList.add("show"));
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    categoryToast.classList.remove("show");
+    setTimeout(() => { categoryToast.hidden = true; }, 250);
+  }, 2200);
+}
+
 addForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const text = itemInput.value.trim();
   if (!text) return;
   itemInput.value = "";
+
+  // Auto-categorize based on the typed (or spoken) text; if nothing
+  // matches, file it under whichever tab is currently open.
+  const guessedCategory = guessCategory(text);
+  const targetCategory = guessedCategory || currentCategory;
+
   await addDoc(collection(db, "items"), {
     text,
-    category: currentCategory,
+    category: targetCategory,
     done: false,
     createdAt: serverTimestamp(),
     createdByEmail: auth.currentUser ? auth.currentUser.email : null,
   });
+
+  if (targetCategory !== currentCategory) {
+    showCategoryToast(CATEGORY_META[targetCategory].label);
+  }
 });
 
 // ---------- Voice to text ----------
@@ -222,4 +315,5 @@ if (SpeechRecognition) {
   micBtn.title = "Voice input isn't supported in this browser — try Chrome or Edge";
   micBtn.style.opacity = "0.4";
 }
+
 
