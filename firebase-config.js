@@ -4,12 +4,12 @@
 // Access is actually controlled by the Firestore security rules (see firestore.rules).
 
 export const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID"
+  apiKey: "AIzaSyBBPyvm5Lm_zGMziK9thWEQQFMWxPt37iY",
+  authDomain: "household-todo-21493.firebaseapp.com",
+  projectId: "household-todo-21493",
+  storageBucket: "household-todo-21493.firebasestorage.app",
+  messagingSenderId: "374490020105",
+  appId: "1:374490020105:web:2e1cdfad7b39e732623bd8"
 };
 
 // The only two people allowed to read/write this list.
